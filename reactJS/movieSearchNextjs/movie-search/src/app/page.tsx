@@ -42,9 +42,13 @@ export default function HomePage() {
           setTotalResults(0);
           setError(data.Error || 'No results found.');
         }
-      } catch (err: any) {
-        setError('Failed to fetch data. Try again later.');
-      } finally {
+      } catch (err: unknown) {
+  if (err instanceof Error) {
+    console.error(err.message);
+  } else {
+    console.error('An unknown error occurred.');
+  }
+} finally {
         setLoading(false);
       }
     };

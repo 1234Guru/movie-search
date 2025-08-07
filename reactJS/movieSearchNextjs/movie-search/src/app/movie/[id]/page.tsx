@@ -2,20 +2,24 @@ import { getMovieDetails } from "../../../../utils/api";
 import { MovieDetails } from "../../../../types/movie";
 import Image from "next/image";
 import Link from "next/link";
-interface Props {
-  params: { id: string };
-}
 
-export default async function MovieDetailsPage({ params }: Props) {
-  const data: MovieDetails = await getMovieDetails(params.id);
+export default async function MovieDetailsPage({
+  params,
+}: {
+  params:Promise< { id: string }>
+}) {
+  const { id } = await params;
+  const data: MovieDetails = await getMovieDetails(id);
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row gap-6">
-        <img
-          src={data.Poster !== "N/A" ? data.Poster : "/no-image.jpg"}
+        <Image
+          src={data.Poster !== "N/A" ? data.Poster.replace("http:", "https:") : "/no-image.jpg"}
           alt={data.Title}
-          className="w-full md:w-72 h-auto object-cover rounded shadow"
+          width={300}
+          height={450}
+          className="rounded shadow"
         />
 
         <div className="flex-1 space-y-2">
@@ -48,8 +52,8 @@ export default async function MovieDetailsPage({ params }: Props) {
       </div>
 
       <Link href="/" className="text-blue-600 underline mt-6 block">
-  ← Back to Search
-</Link>
+        ← Back to Search
+      </Link>
     </div>
   );
 }
